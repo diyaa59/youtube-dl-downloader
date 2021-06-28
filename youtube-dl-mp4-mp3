@@ -1,19 +1,17 @@
 #!/bin/bash
-
-# Enhanced to deliever new features :)
-#here is what the options -cwixrfU parameters mean in the youtube-dl script
-#c: --continue
-#w: --no-overwrites
-#i: --ignore-errors
-#x: --extract-audio
-#r: --rate-limit
-#f: --format
-#U: --update
-
+# Get the youtube video title and store it in a variable.
 videoTitle=$(youtube-dl $1 --get-title)
+# mkdir is allergic to spaces :) .
+# delete spaces from video title variable
 cleanVideoTitle1=${videoTitle// /_}
+# mkdir will see backslash as a whole new directory to be navigated.
+# delete backslashes from video title variable
 cleanVideoTitle2=${cleanVideoTitle1//'/'/_}
-declare -A main=( [url]=$1 [type]=$2 [cleanVideoTitle]=$cleanVideoTitle2 [workingDirectory]=$(pwd) )
+# mkdir and cd don't like the dollar sign listed in the directory name.
+# delete dollar sign from video title variable
+cleanVideoTitle3=${cleanVideoTitle2//'$'/_}
+# declare most variables in an associative array for later use in the script
+declare -A main=( [url]=$1 [type]=$2 [cleanVideoTitle]=$cleanVideoTitle3 [workingDirectory]=$(pwd) )
 
 function mp3_single_function {
 
@@ -48,34 +46,28 @@ function mp4_function {
     cd ${main[workingDirectory]}
     echo "The video has been downloaded to " $title_name "directory"
 }
+case ${main[type]} in
 
-if [[ ${main[type]} = 'mp3-single' ]]; then
-    mp3_single_function
-    unset main
-    exit 1
-elif [[ ${main[type]} = 'mp3-list' ]]; then
-    mp3_list_function
-    unset main
-    exit 1
-elif [[ ${main[type]} = 'mp4' ]]; then
-    mp4_function
-    unset main
-    exit 1
-elif [[ ${main[type]} = 'both' ]]; then
-    mp4_function
-    mp3_single_function
-    unset main
-    exit 1
-elif [[ ! -z '${main[type]}' ]]; then
-    mp4_function
-    unset main
-    exit 1
-elif [[ ! -z '${main[url]}' ]]; then
-    echo "Provide a URL please!"
-    unset main
-    exit 1
-else
-    echo "The second argument you have based to the script is invalid, please check your input!"
-    unset main
-    exit 1
-fi
+    mp3-single)
+        mp3_single_function
+        ;;
+
+    mp3-list)
+        mp3_list_function
+        ;;
+
+    mp4)
+        mp4_function
+        ;;
+    both)
+        mp4_function
+        mp3_single_function
+        ;;
+  *)
+    echo "Please check that you passed the correct arguments to the script!"
+    echo "youtube-dl-mp4-mp3 <YOUTUBE_VIDEO_URL> <TYPE>"
+    echo "Try again"
+    ;;
+esac
+unset main
+exit 1
