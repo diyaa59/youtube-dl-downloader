@@ -11,55 +11,71 @@
 #U: --update
 
 videoTitle=$(youtube-dl $1 --get-title)
-
-declare -A main=( [url]=$1 [type]=$2 [videoTitle]=$videoTitle [cleanVideoTitle]=${videoTitle// /_} [workingDirectory]=$(pwd) )
+cleanVideoTitle1=${videoTitle// /_}
+cleanVideoTitle2=${cleanVideoTitle1//'/'/_}
+declare -A main=( [url]=$1 [type]=$2 [cleanVideoTitle]=$cleanVideoTitle2 [workingDirectory]=$(pwd) )
 
 function mp3_single_function {
 
-    title_name=${main[cleanVideoTitle]}'_audio'
+    title_name=${main[cleanVideoTitle]}'_Audio'
     mkdir ${main[workingDirectory]}/$title_name
     cd $title_name
     youtube-dl -cwix -r 10M --no-playlist -f "bestaudio/best" -o "%(title)s.%(ext)s" --audio-quality 0 --audio-format mp3 --embed-thumbnail --add-metadata  ${main[url]}
     cd ${main[workingDirectory]}
-    echo " the mp3 file has been downloaded to" $title_name "directory."
-    exit 1
+    echo "The mp3 file has been downloaded to" $title_name "directory."
 
 }
 
 function mp3_list_function {
 
-    title_date=$(date +'%D_%H_%M')'_mp3_list'
+    title_date=$(date +'%D_%H_%M_%S')'_mp3_list'
     title_conversion=${title_date//'/'/_}
     title_conversion1=${title_conversion//':'/_}
     mkdir ${main[workingDirectory]}/$title_conversion1
     cd $title_conversion1
     youtube-dl -cwix -r 10M -f "bestaudio/best" --yes-playlist -ciw -o "%(title)s.%(ext)s" --audio-quality 0 --audio-format mp3 --embed-thumbnail --add-metadata  ${main[url]}
     cd ${main[workingDirectory]}
-    echo " the mp3 list has been downloaded to " $title_conversion1 "directory"
-    exit 1
+    echo "The mp3 list has been downloaded to " $title_conversion1 "directory"
 
 }
 
 function mp4_function {
 
-    title_name=${main[cleanVideoTitle]}'_video'
+    title_name=${main[cleanVideoTitle]}'_Video'
     mkdir ${main[workingDirectory]}/$title_name
     cd $title_name
     youtube-dl -cwi -r 10M -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 --embed-thumbnail --add-metadata -o '%(title)s.%(ext)s' ${main[url]}
     cd ${main[workingDirectory]}
-    echo " the video has been downloaded to " $title_name "directory"
-    exit 1
+    echo "The video has been downloaded to " $title_name "directory"
 }
 
 if [[ ${main[type]} = 'mp3-single' ]]; then
     mp3_single_function
+    unset main
+    exit 1
 elif [[ ${main[type]} = 'mp3-list' ]]; then
     mp3_list_function
+    unset main
+    exit 1
 elif [[ ${main[type]} = 'mp4' ]]; then
     mp4_function
+    unset main
+    exit 1
+elif [[ ${main[type]} = 'both' ]]; then
+    mp4_function
+    mp3_single_function
+    unset main
+    exit 1
 elif [[ ! -z '${main[type]}' ]]; then
     mp4_function
+    unset main
+    exit 1
+elif [[ ! -z '${main[url]}' ]]; then
+    echo "Provide a URL please!"
+    unset main
+    exit 1
 else
     echo "The second argument you have based to the script is invalid, please check your input!"
+    unset main
     exit 1
 fi
