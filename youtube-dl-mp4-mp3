@@ -3,67 +3,70 @@
 # Update youtube-dl script!
 youtube-dl -U
 # Get the youtube video title and store it in a variable.
-videoTitle=$(youtube-dl $1 --get-title)
-# mkdir is allergic to spaces :) .
-# delete spaces from video title variable
-cleanVideoTitle1=${videoTitle// /_}
-# mkdir will see backslash as a whole new directory to be navigated.
-# delete backslashes from video title variable
-cleanVideoTitle2=${cleanVideoTitle1//'/'/_}
-# mkdir and cd don't like the dollar sign listed in the directory name.
-# delete dollar sign from video title variable
-cleanVideoTitle3=${cleanVideoTitle2//'$'/_}
-# declare most variables in an associative array for later use in the script
-declare -A main=( [url]=$1 [type]=$2 [cleanVideoTitle]=$cleanVideoTitle3 [workingDirectory]=$(pwd) )
+videoTitle=$(youtube-dl -e -s --no-playlist $1)
+# Due to that some programs that this script rely on are allergic to some special characters the following line will replace them with underscores
+videoTitleFormat=${videoTitle//[\'\-\.\(\)\$\!\%\&\*\#\|\"\`\ \&\:\-\–\,]/_}
+# declare most variables in associative arrays.
+declare -A lists=([mp3List]=$(date +'%D_%H_%M_%S')'_mp3_list' [mp4List]=$(date +'%D_%H_%M_%S')'_mp4_list' [Mp3List]=${lists[mp3List]//[\/\:]/_} [Mp4List]=${lists[mp4List]//[\/\:]/_})
+declare -A singles=( [videoTitle]=$videoTitleFormat'_Video' [audioTitle]=$videoTitleFormat'_Audio' )
+declare -A main=( [url]=$1 [type]=$2 [workingDirectory]=$(pwd) [cleanVideoTitle]=$videoTitleFormat )
 
 function mp3_single_function {
 
-    title_name=${main[cleanVideoTitle]}'_Audio'
-    mkdir ${main[workingDirectory]}/$title_name
-    cd $title_name
-    youtube-dl -cwix -r 10M --no-playlist -f "bestaudio/best" -o "%(title)s.%(ext)s" --audio-quality 0 --audio-format mp3 --embed-thumbnail --add-metadata  ${main[url]}
+    mkdir ${main[workingDirectory]}/${singles[audioTitle]}
+    cd ${singles[audioTitle]}
+    youtube-dl -cwix --http-chunk-size 10M -r 10M --no-playlist --restrict-filenames -f "bestaudio/best" -o "%(title)s.%(ext)s" --audio-quality 0 --audio-format mp3 --embed-thumbnail --add-metadata  ${main[url]}
     cd ${main[workingDirectory]}
-    echo "The mp3 file has been downloaded to" $title_name "directory."
+    echo "The mp3 file has been downloaded to the following directory: " ${singles[audioTitle]}
 
 }
 
 function mp3_list_function {
 
-    title_date=$(date +'%D_%H_%M_%S')'_mp3_list'
-    title_conversion=${title_date//'/'/_}
-    title_conversion1=${title_conversion//':'/_}
-    mkdir ${main[workingDirectory]}/$title_conversion1
-    cd $title_conversion1
-    youtube-dl -cwix -r 10M -f "bestaudio/best" --yes-playlist -ciw -o "%(title)s.%(ext)s" --audio-quality 0 --audio-format mp3 --embed-thumbnail --add-metadata  ${main[url]}
+#   local titleDate=${titles[mp3List]//[\/\:]/_}
+    mkdir ${main[workingDirectory]}/${lists[Mp3List]}
+    cd ${lists[Mp3List]}
+    youtube-dl -cwix --http-chunk-size 10M -r 10M --restrict-filenames -f "bestaudio/best" --yes-playlist -ciw -o "%(title)s.%(ext)s" --audio-quality 0 --audio-format mp3 --embed-thumbnail --add-metadata  ${main[url]}
     cd ${main[workingDirectory]}
-    echo "The mp3 list has been downloaded to " $title_conversion1 "directory"
+    echo "The mp3 list has been downloaded to the following directory: " ${lists[Mp3List]}
 
 }
 
-function mp4_function {
+function mp4_list_function {
 
-    title_name=${main[cleanVideoTitle]}'_Video'
-    mkdir ${main[workingDirectory]}/$title_name
-    cd $title_name
-    youtube-dl -cwi -r 10M -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 --embed-thumbnail --add-metadata -o '%(title)s.%(ext)s' ${main[url]}
+#   local titleDate=${titles[mp4List]//[\/\:]/_}
+    mkdir ${main[workingDirectory]}/${lists[Mp4List]}
+    cd ${lists[Mp4List]}
+    youtube-dl -cwi --http-chunk-size 10M -r 10M --restrict-filenames --yes-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 --embed-thumbnail --add-metadata -o '%(title)s.%(ext)s' ${main[url]}
     cd ${main[workingDirectory]}
-    echo "The video has been downloaded to " $title_name "directory"
+    echo "The videos playlist has been downloaded to the following directory: " ${lists[Mp4List]}
 }
+
+function mp4_single_function {
+
+    mkdir ${main[workingDirectory]}/${singles[videoTitle]}
+    cd ${singles[videoTitle]}
+    youtube-dl -cwi --http-chunk-size 10M -r 10M --restrict-filenames --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 --embed-thumbnail --add-metadata -o '%(title)s.%(ext)s' ${main[url]}
+    cd ${main[workingDirectory]}
+    echo "The video has been downloaded to following directory: " ${singles[videoTitle]}
+}
+
 case ${main[type]} in
 
     mp3-single)
         mp3_single_function
         ;;
-
+    mp4-single)
+        mp4_single_function
+        ;;
     mp3-list)
         mp3_list_function
         ;;
-
-    mp4)
-        mp4_function
+    mp4-list)
+        mp4_list_function
         ;;
     both)
-        mp4_function
+        mp4_single_function
         mp3_single_function
         ;;
   *)
@@ -73,4 +76,6 @@ case ${main[type]} in
     ;;
 esac
 unset main
+unset lists
+unset singles
 exit 1
