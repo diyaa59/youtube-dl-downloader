@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Update youtube-dl script!
+youtube-dl -U
 # Get the youtube video title and store it in a variable.
 videoTitle=$(youtube-dl $1 --get-title)
 # mkdir is allergic to spaces :) .
