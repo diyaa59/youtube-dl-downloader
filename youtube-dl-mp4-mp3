@@ -13,12 +13,12 @@ read TYPE
 # Update youtube-dl script!
 youtube-dl -U
 # Get the youtube video title and store it in a variable.
-videoTitle=$(youtube-dl -e -s --no-playlist $URL)
 # Due to that some programs that this script rely on are allergic to some special characters the following line will replace them with underscores
-videoTitleFormat=${videoTitle//[\'\-\.\(\)\$\!\%\&\*\#\|\"\`\ \&\:\-\–\,]/_}
+# videoTitleFormat=${formats[videoTitleRaw]//[\'\-\.\(\)\$\!\%\&\*\#\|\"\`\ \&\:\-\–\,]/_}
 # declare most variables in associative arrays.
 declare -A lists=([mp3List]=$(date +'%D_%H_%M_%S')'_mp3_list' [mp4List]=$(date +'%D_%H_%M_%S')'_mp4_list' [Mp3List]=${lists[mp3List]//[\/\:]/_} [Mp4List]=${lists[mp4List]//[\/\:]/_})
-declare -A singles=( [videoTitle]=$videoTitleFormat'_Video' [audioTitle]=$videoTitleFormat'_Audio' )
+declare -A formats=( [videoTitleRaw]=$(youtube-dl -e -s --no-playlist $URL) )
+declare -A singles=( [videoTitleFormat]=${formats[videoTitleRaw]//[\'\-\.\(\)\$\!\%\&\*\#\|\"\`\ \&\:\-\–\,\/]/_} [videoTitle]=${singles[videoTitleFormat]}'_Video' [audioTitle]=${singles[videoTitleFormat]}'_Audio' )
 declare -A main=( [url]=$URL [type]=$TYPE [workingDirectory]=$(pwd) [cleanVideoTitle]=$videoTitleFormat )
 
 function mp3_single_function {
@@ -86,4 +86,5 @@ esac
 unset main
 unset lists
 unset singles
+unset formats
 exit 1
