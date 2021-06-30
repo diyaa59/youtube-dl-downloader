@@ -1,15 +1,25 @@
 #!/bin/bash
 
+echo "enter the URL of the video you would like to download."
+read URL
+echo "What are you trying to download?"
+echo "A - mp3 single audio: This choice is for downloading one video in audio format out of a playlist or just for the URL of a single video."
+echo "B - mp3 playlist audio: This choice is for downloading a playlist of videos in audio format into a folder."
+echo "C - mp4 single video: This choice is for downloading a single video out of a playlist or just a single video."
+echo "D - mp4 playlist video: This choice is for downloading a playlist of videos into a folder."
+echo "E - both mp3 single and mp4 single: This choice is for downloading a video in mp3 and mp4 formats."
+echo "Please type the letter that corresponds to your choice."
+read TYPE
 # Update youtube-dl script!
 youtube-dl -U
 # Get the youtube video title and store it in a variable.
-videoTitle=$(youtube-dl -e -s --no-playlist $1)
+videoTitle=$(youtube-dl -e -s --no-playlist $URL)
 # Due to that some programs that this script rely on are allergic to some special characters the following line will replace them with underscores
 videoTitleFormat=${videoTitle//[\'\-\.\(\)\$\!\%\&\*\#\|\"\`\ \&\:\-\–\,]/_}
 # declare most variables in associative arrays.
 declare -A lists=([mp3List]=$(date +'%D_%H_%M_%S')'_mp3_list' [mp4List]=$(date +'%D_%H_%M_%S')'_mp4_list' [Mp3List]=${lists[mp3List]//[\/\:]/_} [Mp4List]=${lists[mp4List]//[\/\:]/_})
 declare -A singles=( [videoTitle]=$videoTitleFormat'_Video' [audioTitle]=$videoTitleFormat'_Audio' )
-declare -A main=( [url]=$1 [type]=$2 [workingDirectory]=$(pwd) [cleanVideoTitle]=$videoTitleFormat )
+declare -A main=( [url]=$URL [type]=$TYPE [workingDirectory]=$(pwd) [cleanVideoTitle]=$videoTitleFormat )
 
 function mp3_single_function {
 
@@ -23,7 +33,6 @@ function mp3_single_function {
 
 function mp3_list_function {
 
-#   local titleDate=${titles[mp3List]//[\/\:]/_}
     mkdir ${main[workingDirectory]}/${lists[Mp3List]}
     cd ${lists[Mp3List]}
     youtube-dl -cwix --http-chunk-size 10M -r 10M --restrict-filenames -f "bestaudio/best" --yes-playlist -ciw -o "%(title)s.%(ext)s" --audio-quality 0 --audio-format mp3 --embed-thumbnail --add-metadata  ${main[url]}
@@ -34,7 +43,6 @@ function mp3_list_function {
 
 function mp4_list_function {
 
-#   local titleDate=${titles[mp4List]//[\/\:]/_}
     mkdir ${main[workingDirectory]}/${lists[Mp4List]}
     cd ${lists[Mp4List]}
     youtube-dl -cwi --http-chunk-size 10M -r 10M --restrict-filenames --yes-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 --embed-thumbnail --add-metadata -o '%(title)s.%(ext)s' ${main[url]}
@@ -53,19 +61,19 @@ function mp4_single_function {
 
 case ${main[type]} in
 
-    mp3-single)
+    A)
         mp3_single_function
         ;;
-    mp4-single)
-        mp4_single_function
-        ;;
-    mp3-list)
+    B)
         mp3_list_function
         ;;
-    mp4-list)
+    C)
+        mp4_single_function
+        ;;
+    D)
         mp4_list_function
         ;;
-    both)
+    E)
         mp4_single_function
         mp3_single_function
         ;;
