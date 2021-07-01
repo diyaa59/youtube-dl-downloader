@@ -1,6 +1,6 @@
 # `youtube-dl-mp4-mp3`
 
-![Peek 2021-06-30 15-11](https://user-images.githubusercontent.com/26883110/124032326-ac6c0380-d9b5-11eb-9b2f-1595647e6181.gif)
+![script run](https://user-images.githubusercontent.com/26883110/124068836-7b60f280-d9f8-11eb-8128-bddccc452488.gif)
 
 This script will download the best quality audio, video and thumbnail, using `youtube-dl`, from a YouTube video URL that you provide; combine them together using `ffmpeg` into an mp4 video with mp3 audio and the same thumbnail as the YouTube Video provided.
 
