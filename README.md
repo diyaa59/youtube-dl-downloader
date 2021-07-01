@@ -15,8 +15,6 @@ This script as been tested on the following linux distros as a `sudo` user.
 
 ## TLDR
 
-- `youtube-dl-mp4-mp3` + `YouTube URL` = `mp4 Video` with a YouTube thumbnail in a folder
-
 - Tested on debian
 
 - Easy to use
@@ -28,51 +26,29 @@ This script as been tested on the following linux distros as a `sudo` user.
 	# Install ffmpeg, curl, atomicparsley, python
 	sudo apt install -y ffmpeg curl atomicparsley python
 	```
-2. Install the script
-
+2. Install the script:
+	
+	2.1 Get the script from github
 	```sh
-	# Get the script
+	mkdir ~/script
+	cd ~/script
 	git clone https://github.com/diyaa59/youtube-dl-mp4-mp3.git
 	cd youtube-dl-mp4-mp3
 	```
-	```sh
-	# Move the script somewhere
-	mkdir -p ~/scripts
-	mv ./youtube-dl-mp4-mp3 ~/scripts
-	
-	# optionally move readme to home
-	mv README.md ~/youtube-dl-mp4-mp3_README.md 
+	2.2 Give the script execute permissions
+	```sh 
+	chmod +x youtube-dl-mp4-mp3
 	```
+	2.3 Link the script to a directory included in your PATH variable such as usr/local/bin
 	```sh
-	# give the script execute permissions
-	sudo chmod +x youtube-dl-mp4-mp3
-	```
-	```sh
-	# link the script to a directory included in your PATH variable
 	sudo ln -s ~/script/youtube-dl-mp4-mp3/youtube-dl-mp4-mp3 /usr/local/bin
 	```
-3. Run the script and give it a URL. This will default to mp4 download, for download options see below.
 
-	```bash
-	youtube-dl-mp4-mp3 https://www.youtube.com/watch?v=dQw4w9WgXcQ
-	```
+## Usage
 
-## Download Options
+All you need to do is Run this script and follow instructions in your bash session!
 
-### MP3 Single
-
-Download a single audio file out of a URL you provide even if the URL links to a playlist.
-
-```sh
-youtube-dl-mp4-mp3 https://www.youtube.com/watch?v=dQw4w9WgXcQ mp3-single
-```
-### MP3 Playlist
-
-Download a full playlist from youtube (as long as you provide the playlist URL and NOT the URL of a single video)
-
-```sh
-youtube-dl-mp4-mp3 https://www.youtube.com/watch?v=dQw4w9WgXcQ mp3-list
-```
+![image](https://user-images.githubusercontent.com/26883110/124055825-d5a28900-d9e1-11eb-85b3-eff18ae0c0f3.png)
 
 ## To update the script
 
