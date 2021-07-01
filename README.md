@@ -23,8 +23,8 @@ This script as been tested on the following linux distros as a `sudo` user.
 
 1. Install the Dependancies
 	```sh
-	# Install ffmpeg, curl, atomicparsley, python
-	sudo apt install -y ffmpeg curl atomicparsley python
+	# Install ffmpeg, git, atomicparsley, python
+	sudo apt install -y ffmpeg git atomicparsley python
 	```
 2. Install the script:
 	
