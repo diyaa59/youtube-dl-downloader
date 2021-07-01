@@ -28,20 +28,23 @@ This script as been tested on the following linux distros as a `sudo` user.
 	```
 2. Install the script:
 	
-	2.1 Get the script from github
+	2.1 Get the script from github.
 	```sh
 	mkdir ~/script
 	cd ~/script
 	git clone https://github.com/diyaa59/youtube-dl-mp4-mp3.git
-	cd youtube-dl-mp4-mp3
+	cd ~/script/youtube-dl-mp4-mp3
 	```
-	2.2 Give the script execute permissions
-	```sh 
-	chmod +x youtube-dl-mp4-mp3
-	```
-	2.3 Link the script to a directory included in your PATH variable such as usr/local/bin
+	2.2 Give the script execute permissions.
 	```sh
-	sudo ln -s ~/script/youtube-dl-mp4-mp3/youtube-dl-mp4-mp3 /usr/local/bin
+	cd ~/script/youtube-dl-mp4-mp3
+	chmod +x executables/youtube-dl-mp4-mp3
+	```
+	2.3 Add the path `youtube-dl-mp4-mp3/executables` to your user PATH variable (DO NOT do this more than once).
+	```sh
+	echo '
+	export PATH=~/script/youtube-dl-mp4-mp3/executables/:$PATH
+	'  | tee -a ~/.bashrc > /dev/null
 	```
 
 ## Usage
