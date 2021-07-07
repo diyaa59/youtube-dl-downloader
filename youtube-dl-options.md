@@ -1,15 +1,15 @@
 # here is what the options -cwixrfU parameters mean in the youtube-dl script
 
-- ## -c: --continue
+-c --continue
 
-- ## -w: --no-overwrites
+-w --no-overwrites
 
-- ## -i: --ignore-errors
+-i --ignore-errors
 
-- ## -x: --extract-audio
+-x --extract-audio
 
-- ## -r: --rate-limit
+-r --rate-limit
 
-- ## -f: --format
+-f --format
 
-- ## -U: --update
+-U --update
