@@ -32,7 +32,7 @@ This script as been tested on the following linux distros as a `sudo` user.
 #### Quick Install
 
 ```sh
-$ sudo bash <(curl -s https://raw.githubusercontent.com/diyaa59/youtube-dl-mp4-mp3/main/install.sh)
+sudo bash <(curl -s https://raw.githubusercontent.com/diyaa59/youtube-dl-mp4-mp3/main/install.sh)
 ```
 
 #### Manual Install
@@ -58,7 +58,7 @@ echo 'export PATH=~/script/youtube-dl-mp4-mp3/bin/:$PATH'  | tee -a ~/.bashrc > 
 
 ### 2. Run the Script
 ```sh
-$ youtube-dl-mp4-mp3
+youtube-dl-mp4-mp3
 ```
 ### 3. Follow instructions in terminal
 
