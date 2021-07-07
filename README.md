@@ -32,7 +32,7 @@ This script as been tested on the following linux distros as a `sudo` user.
 #### Quick Install
 
 ```sh
-sudo bash <(curl -s https://raw.githubusercontent.com/diyaa59/youtube-dl-mp4-mp3/main/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/diyaa59/youtube-dl-mp4-mp3/main/install.sh)
 ```
 
 #### Manual Install
