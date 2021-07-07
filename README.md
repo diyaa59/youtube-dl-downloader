@@ -2,7 +2,13 @@
 
 ![script run](https://user-images.githubusercontent.com/26883110/124068836-7b60f280-d9f8-11eb-8128-bddccc452488.gif)
 
-This script will download the best quality audio, video and thumbnail, using `youtube-dl`, from a YouTube video URL that you provide; combine them together using `ffmpeg` into an mp4 video with mp3 audio and the same thumbnail as the YouTube Video provided.
+This script will download the best quality audio, video and thumbnail, using `youtube-dl`, from a **YouTube video URL** that you provide.
+
+Combine them together using `ffmpeg` into an **mp4 video** with **mp3 audio** with the thumbnail as the YouTube Video provided
+
+**or**
+
+An **mp3 audio** file with the video's thumbnail as album art.
 
 ## Tested on 
 This script as been tested on the following linux distros as a `sudo` user.
@@ -16,7 +22,6 @@ This script as been tested on the following linux distros as a `sudo` user.
 ## TLDR
 
 - Tested on debian
-
 - Easy to use
 
 ## Getting started
@@ -27,37 +32,34 @@ This script as been tested on the following linux distros as a `sudo` user.
 	sudo apt install -y ffmpeg git atomicparsley python
 	```
 2. Install the script:
-	
-	2.1 Get the script from github.
+    2.1. Get the script from github
 	```sh
 	mkdir ~/script
 	cd ~/script
 	git clone https://github.com/diyaa59/youtube-dl-mp4-mp3.git
 	cd ~/script/youtube-dl-mp4-mp3
 	```
-	2.2 Give the script execute permissions.
+	2.2. Give the script execute permissions.
 	```sh
 	cd ~/script/youtube-dl-mp4-mp3
-	chmod +x executables/youtube-dl-mp4-mp3
+	chmod +x bin/youtube-dl-mp4-mp3
 	```
-	2.3 Add the path `youtube-dl-mp4-mp3/executables` to your user PATH variable (DO NOT do this more than once).
+	2.3. Add the path `~/script/youtube-dl-mp4-mp3/bin` to your user PATH variable (DO NOT do this more than once).
 	```sh
-	echo '
-	export PATH=~/script/youtube-dl-mp4-mp3/executables/:$PATH
-	'  | tee -a ~/.bashrc > /dev/null
+	echo 'export PATH=~/script/youtube-dl-mp4-mp3/bin/:$PATH'  | tee -a ~/.bashrc > /dev/null
 	```
 
 ## Usage
 
-All you need to do is Run this script and follow instructions in your bash session!
+All you need to do is
+- Run this script
+- Follow instructions in your terminal!
 
 ![image](https://user-images.githubusercontent.com/26883110/124055825-d5a28900-d9e1-11eb-85b3-eff18ae0c0f3.png)
 
 ## To update the script
 
-To update the script you would need to run the following commands:
-
-```bash
+```sh
 cd ~/script/youtube-dl-mp4-mp3
 git pull
 ```
